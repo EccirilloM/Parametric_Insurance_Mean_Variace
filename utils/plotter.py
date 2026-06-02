@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from config.settings import L
 from core.insurance_math import (optimal_params, P_d, P_p, MV_d, MV_p, k_budget, find_crossing)
-from core.fat_tails import MV_d_pareto, MV_p_pareto
+from core.fat_tails import MV_d_pareto, MV_p_pareto, THETA
 
 def run_simulation_and_plot(theta_d: float, theta_p: float, output_path: str):
     if theta_d <= 0 or theta_p <= 0:
@@ -108,13 +108,22 @@ def run_bonus_fat_tail_plot(theta_d: float, theta_p: float, output_path: str):
     d_star, k_star = optimal_params(theta_d, theta_p)
     gamma_d = np.linspace(0.0, 50_000, 3000)
 
-    
     mv_d_base = MV_d(d_star, gamma_d, theta_d)
     mv_p_base = np.full_like(gamma_d, MV_p(k_star, theta_p))
     
     # (Fat Tails)
     mv_d_fat = MV_d_pareto(d_star, gamma_d, theta_d)
     mv_p_fat = np.full_like(gamma_d, MV_p_pareto(k_star, theta_p))
+
+    # --- Print Terminal---
+    sep = "=" * 62
+    print(sep)
+    print(f"  Bonus: Fat Tails (Pareto) vs Exponential")
+    print(sep)
+    print(f"  Dynamic Calibration:")
+    print(f"    THETA parameter      = {THETA:>10,.2f} EUR")
+    print(sep)
+    # --------------------------------------
 
     fig, ax = plt.subplots(figsize=(10, 6))
     
@@ -132,4 +141,4 @@ def run_bonus_fat_tail_plot(theta_d: float, theta_p: float, output_path: str):
     plt.tight_layout()
     plt.savefig(output_path, dpi=180)
     plt.close()
-    print(f"  Fat Tails Bonus Figure saved → {output_path}")
+    print(f"\n  Fat Tails Bonus Figure saved → {output_path}\n")
