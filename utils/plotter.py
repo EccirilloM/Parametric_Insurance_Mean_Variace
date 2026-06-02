@@ -40,9 +40,9 @@ def run_simulation_and_plot(theta_d: float, theta_p: float, output_path: str):
     print(sep)
     print(f"  Indifference thresholds:")
     if not np.isnan(gamma_indif):
-        print(f"    gamma_indif  (MV_d = MV_p opt)    = {gamma_indif:>10,.2f} EUR")
+        print(f"    gamma_indif  (MV_d = MV_p opt)    = {gamma_indif:>10,.2f} €")
     if not np.isnan(gamma_indif_prime):
-        print(f"    gamma_indif' (MV_d = MV_p budget) = {gamma_indif_prime:>10,.2f} EUR")
+        print(f"    gamma_indif' (MV_d = MV_p budget) = {gamma_indif_prime:>10,.2f} €")
     print(sep)
 
     # Plotting logic
@@ -54,8 +54,8 @@ def run_simulation_and_plot(theta_d: float, theta_p: float, output_path: str):
 
     fig, ax1 = plt.subplots(figsize=(11, 6.5))
 
-    ax1.set_xlabel(r"$\gamma_d$", fontsize=13)
-    ax1.set_ylabel("Premium", fontsize=13)
+    ax1.set_xlabel(r"$\gamma_d$ [€]", fontsize=13)
+    ax1.set_ylabel("Premium [€]", fontsize=13)
     l_pd, = ax1.plot(gd_plt, p_d_arr[mask], color=C_PD, lw=2.0, label=r"$P_d$")
     l_pp, = ax1.plot(gd_plt, p_p_arr[mask], color=C_PP, lw=2.0, label=r"$P_p$")
     
@@ -63,7 +63,8 @@ def run_simulation_and_plot(theta_d: float, theta_p: float, output_path: str):
     ax1.set_ylim(0, p_d_arr[mask].max() * 1.28)
 
     ax2 = ax1.twinx()
-    ax2.set_ylabel("Mean-Variance", fontsize=13)
+   
+    ax2.set_ylabel("Mean-Variance [€]", fontsize=13)
     l_mvd, = ax2.plot(gd_plt, mv_d_arr[mask], color=C_MVD, lw=2.2, label=r"$MV_d$")
     l_mvp, = ax2.plot(gd_plt, mv_p_arr[mask], color=C_MVP, lw=2.2, label=r"$MV_p$")
     l_mvpb, = ax2.plot(gd_plt, mv_pb_arr[mask], color=C_MVPB, lw=2.2, label=r"$MV_p^{(\mathrm{budget}\ P_d)}$")
@@ -77,14 +78,14 @@ def run_simulation_and_plot(theta_d: float, theta_p: float, output_path: str):
     if not np.isnan(gamma_indif) and gamma_indif <= x_max:
         ax1.axvline(gamma_indif, color=C_MVD, linestyle='--', lw=1.6, alpha=0.85)
         ax1.text(gamma_indif, y0 + (y1 - y0) * 0.05, 
-                 rf"$\gamma_{{\mathrm{{indif}}}} = {gamma_indif:,.0f}$", 
+                 rf"$\gamma_{{\mathrm{{indif}}}} = {gamma_indif:,.0f}$ €", 
                  color=C_MVD, ha='center', va='bottom', fontsize=11,
                  bbox=dict(facecolor='white', edgecolor='none', alpha=0.75, pad=2.0))
 
     if not np.isnan(gamma_indif_prime) and gamma_indif_prime <= x_max:
         ax1.axvline(gamma_indif_prime, color=C_MVPB, linestyle='--', lw=1.6, alpha=0.85)
         ax1.text(gamma_indif_prime, y0 + (y1 - y0) * 0.05, 
-                 rf"$\gamma_{{\mathrm{{indif}}}}' = {gamma_indif_prime:,.0f}$", 
+                 rf"$\gamma_{{\mathrm{{indif}}}}' = {gamma_indif_prime:,.0f}$ €", 
                  color=C_MVPB, ha='center', va='bottom', fontsize=11,
                  bbox=dict(facecolor='white', edgecolor='none', alpha=0.75, pad=2.0))
 
@@ -115,13 +116,13 @@ def run_bonus_fat_tail_plot(theta_d: float, theta_p: float, output_path: str):
     mv_d_fat = MV_d_pareto(d_star, gamma_d, theta_d)
     mv_p_fat = np.full_like(gamma_d, MV_p_pareto(k_star, theta_p))
 
-    # --- Print Terminal---
+    # --- Print Terminal for Bonus ---
     sep = "=" * 62
     print(sep)
     print(f"  Bonus: Fat Tails (Pareto) vs Exponential")
     print(sep)
     print(f"  Dynamic Calibration:")
-    print(f"    THETA parameter      = {THETA:>10,.2f} EUR")
+    print(f"    THETA parameter      = {THETA:>10,.2f} €")
     print(sep)
     # --------------------------------------
 
@@ -134,8 +135,8 @@ def run_bonus_fat_tail_plot(theta_d: float, theta_p: float, output_path: str):
     ax.plot(gamma_d, mv_p_fat, label="MV_p (Pareto - Fat Tails)", color="purple", lw=2)
 
     ax.set_title("Bonus Stress Test: Impact of Fat Tails on Utility")
-    ax.set_xlabel(r"$\gamma_d$")
-    ax.set_ylabel("Mean-Variance Utility")
+    ax.set_xlabel(r"$\gamma_d$ [€]")
+    ax.set_ylabel("Mean-Variance Utility [€]")
     ax.legend(loc="best", fontsize=9)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
