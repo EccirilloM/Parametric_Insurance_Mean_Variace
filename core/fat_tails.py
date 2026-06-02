@@ -4,7 +4,7 @@ from config.settings import L, W0, LAMBDA_RATE, GAMMA_P, BETA
 from core.insurance_math import EYI 
 
 # =====================================================================
-# CALIBRAZIONE DINAMICA TRAMITE SCIPY
+# DYNAMIC CALIBRATION
 # =====================================================================
 def objective_function(theta_guess):
     return theta_guess * np.log(1.0 + L / theta_guess) - EYI
